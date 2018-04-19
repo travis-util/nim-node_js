@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+  - node
+
+env:
+  global:
+  - PATH=~/.nimble/bin:$PATH
+
+cache:
+  directories:
+  - ~/.choosenim
+  - ~/.nimble
+
+install:
+- |
+  if command -v choosenim; then
+    choosenim -yes update self
+    choosenim -yes update stable
+  else
+    wget --quiet https://nim-lang.org/choosenim/init.sh && sh init.sh -y
+  fi
+
+script:
+- cat average_line_length.nim | nim compile --run average_line_length.nim
+
+after_script:
+- ls --color ~/.nimble/bin
+- choosenim
+- nim
+- cc --version
